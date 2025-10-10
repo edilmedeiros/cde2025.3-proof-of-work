@@ -18,8 +18,9 @@ Your solutions should be in the form of text files in the `solutions` folder of 
 The autograder will run the scripts in the `graders` folder to verify your answers.
 You can use them to check your answers, but DO NOT MODIFY THE GRADER SCRIPTS.
 
-**All cryptographic operations must use the secp256k1 elliptic curve and the sha256 hash function**.
-This is the same curve used by Bitcoin and Ethereum, making your implementations directly relevant to real cryptocurrency systems.
+These exercises are adaptions of the Bitcoin protocol, but we are not messing with endianness or double hashes.
+**All cryptographic operations must use the (single) sha256 hash function**.
+**All byte strings must be parsed and serialized as big endian**.
 
 You can use any programming language you prefer, the graders will check only the final results you provide in text files.
 
@@ -49,7 +50,7 @@ Your program should select transactions in this list to compose a block accordin
 - A transaction may have zero, one, or many ancestors in the mempool. It may also have zero, one, or many children in the mempool.
 - For this exercise, assume that there is no coinbase transaction.
 - For this exercise, a block can't be empty.
-- For this exercise, your block MUST include the transaction `TXID`
+- For this exercise, your block MUST include the transaction `4c50e3dad7f98bceb6441f96b23748dea84fbdb7cedd603441e6ea4a574d04a6`. 
 
 *Expected output*: a text file `solutions/exercise01.txt` with the list of selected txids, separated by newlines, which make a valid block, maximizing the fee to the miner.
 Transactions must appear in order.
@@ -61,6 +62,8 @@ You are welcome to bribe yourself in the Discord server.
 Let's see who can take the most out of this mempool!
 
 TODO: Add example of output
+
+MAYBE: Ask for a minimum fee collected in the block to make it impossible to handcraft a solution like I did.
 
 ---
 
@@ -96,7 +99,8 @@ For this exercise, the block header will be composed by the following fields:
 - `timestamp`: 4 bytes, unix time.
 - `nonce`: 8 bytes.
 
-The timestamp should be greater than `Jan 03 2009 16:15:05 UTC` and less than `Jan 12 2009 01:30:25 UTC`.
+1. The timestamp should be greater than `Jan 03 2009 16:15:05 UTC` and less than `Jan 12 2009 01:30:25 UTC`.
+2. The header must be serialized by concatenating the fields in order, in hex.
 
 The proof of work target is `00000000ffff0000000000000000000000000000000000000000000000000000`, i.e. the hash of your block header should be less than or equal to the target value.
 
