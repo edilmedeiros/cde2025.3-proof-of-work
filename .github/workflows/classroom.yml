@@ -1,28 +1,26 @@
 
 name: Classroom Autograding
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch: {}
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
 
 jobs:
-  autograding:
+  run-autograding-test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: read
-      packages: read
-
     steps:
       - name: Checkout student repo
         uses: actions/checkout@v4
 
-      # Pull your PRIVATE grader repo (the one you already built)
       - name: Checkout helpers
         uses: actions/checkout@v4
         with:
           repository: Prof-Edil/test-3
-          ref: v1                                   # pin a tag
+          # ref: v1                                   # pin a tag
           path: _grader
           # token: ${{ secrets.GRADER_PAT }}          # org secret: read-only PAT for that repo
 
