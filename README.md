@@ -61,7 +61,7 @@ Of course, you want to maximize the total amount of fees paid by the transaction
 You are welcome to bribe yourself in the Discord server.
 Let's see who can take the most out of this mempool!
 
-TODO: Add example of output
+TODO Example output:
 
 MAYBE: Ask for a minimum fee collected in the block to make it impossible to handcraft a solution like I did.
 
@@ -73,16 +73,27 @@ For performance reasons, we don't hash the list of transactions that compose the
 Instead, we build a block header that includes a commitment to those transactions; i.e., we include a (single) hash that can be used to efficiently prove that all the selected transactions were indeed included in the block.
 We call this hash a *merkle root*.
 
-Your program should compute the merkle root for the transactions you selected in Exercise 1, according to the following rules:
+Your program should compute the merkle root for the transactions provided in `data/ex02_txid_list.txt`, according to the following rules:
 
 - Txids should be parsed as raw bytes (not pure strings).
 - All hashes should be (single) `sha256`.
 - Hashes should be combined in pairs by concatenating raw bytes, without any separators.
 - If a hash has not a pair to combine, concatenate it with itself.
 
-*Expected output*: a text file `solutions/exercise02.txt` with the merkle root of your block in the first line and proofs that the transaction `TXID` was included in the block in the subsequent lines.
+*Expected output*: a text file `solutions/exercise02.txt` with the merkle root of your block in the first line and proofs that the transaction `49ff8cccf1ca12179e9ae7a4760f550b5a18401b27e1e057604e27c3e10c08fb` was included in the block in the subsequent lines.
 
-TODO: Add example of output.
+Example Output format, not actual solution:
+
+`182adcf8a8ae04bfa4e413d057618417c11ee13cfb28b9ddd3951d87f27e96be` <- `Merle Root`
+
+`2ffe4b4ee2d44a7f7021694bfc008fb6a489b79f3edca9e6807ef51c5a0cebe7` <- `Lv0 Sibling` that gets hashed with required TXID `49ff8ccc...8fb`
+
+`ee4c500282979f30b6dba2928034409658a216f76d759368309912197b389334` <- `Lv1 Sibling` that gets hashed with above `2ffe4...0be7`
+
+...
+
+`ee4c500282979f30b6dba2928034409658a216f76d759368309912197b389334` <- `Lv12 Sibling` that gets hashed to create the Merkle root
+
 
 ---
 
