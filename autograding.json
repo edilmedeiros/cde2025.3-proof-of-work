@@ -1,0 +1,36 @@
+
+{
+  "tests": [
+    {
+      "name": "Exercise 1: Transaction selection",
+      "setup": "",
+      "run": "python _grader/graders/check_exercise01.py",
+      "input": "",
+      "output": "OK",
+      "comparison": "included",
+      "timeout": 60,
+      "points": 30
+    },
+    {
+      "name": "Exercise 2: Merkle root + inclusion proof",
+      "setup": "",
+      "run": "python _grader/graders/check_exercise02.py",
+      "input": "",
+      "output": "OK",
+      "comparison": "included",
+      "timeout": 60,
+      "points": 35
+    },
+    {
+      "name": "Exercise 3: 80-byte header + PoW",
+      "setup": "",
+      "run": "python _grader/graders/check_exercise03.py",
+      "input": "",
+      "output": "OK",
+      "comparison": "included",
+      "timeout": 60,
+      "points": 35
+    }
+  ],
+  "version": 0
+}

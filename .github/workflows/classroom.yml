@@ -1,0 +1,40 @@
+
+name: Classroom Autograding
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      packages: read
+
+    steps:
+      - name: Checkout student repo
+        uses: actions/checkout@v4
+
+      # Pull your PRIVATE grader repo (the one you already built)
+      - name: Checkout helpers
+        uses: actions/checkout@v4
+        with:
+          repository: Prof-Edil/test-3
+          ref: v1                                   # pin a tag
+          path: _grader
+          # token: ${{ secrets.GRADER_PAT }}          # org secret: read-only PAT for that repo
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install grader deps (if any)
+        if: hashFiles('_grader/requirements.txt') != ''
+        run: pip install -r _grader/requirements.txt
+
+      # Run GitHub Classroom Autograding
+      - name: Run autograding tests
+        uses: education/autograding@v1
