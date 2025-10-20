@@ -21,8 +21,8 @@ from pathlib import Path
 import sys
 import hashlib
 
-TX_LIST_PATH = Path("solutions/exercise01.txt")
-REQUIRED_TXID = "4c50e3dad7f98bceb6441f96b23748dea84fbdb7cedd603441e6ea4a574d04a6"
+TX_LIST_PATH = Path("data/ex02_txid_list.txt")
+REQUIRED_TXID = "49ff8cccf1ca12179e9ae7a4760f550b5a18401b27e1e057604e27c3e10c08fb"
 OUTPUT_PATH = Path("solutions/exercise02.txt")
 
 
