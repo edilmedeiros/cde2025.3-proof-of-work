@@ -120,9 +120,10 @@ def check_all(mempool, submission, required_txid):
 
 
 def ok(total_weight, count):
-    print("OK")
-    print(f"Tx count: {count}")
-    print(f"Total weight: {total_weight}")
+    # print("OK")
+    # print(f"Tx count: {count}")
+    # print(f"Total weight: {total_weight}")
+    print("PASS")
     sys.exit(0)
 
 
