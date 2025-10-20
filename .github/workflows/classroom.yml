@@ -1,38 +1,69 @@
-
-name: Classroom Autograding
+name: Autograding Tests
 on:
   - push
   - workflow_dispatch
   - repository_dispatch
+
 permissions:
   checks: write
   actions: read
   contents: read
 
 jobs:
-  run-autograding-test:
+  run-autograding-tests:
     runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
     steps:
-      - name: Checkout student repo
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Checkout helpers
-        uses: actions/checkout@v4
-        with:
-          repository: Prof-Edil/test-3
-          # ref: v1                                   # pin a tag
-          path: _grader
-          # token: ${{ secrets.GRADER_PAT }}          # org secret: read-only PAT for that repo
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install grader deps (if any)
-        if: hashFiles('_grader/requirements.txt') != ''
-        run: pip install -r _grader/requirements.txt
-
-      # Run GitHub Classroom Autograding
-      - name: Run autograding tests
-        uses: education/autograding@v1
+    # Exercise 1
+    - name: "Exercise 1: Transaction selection"
+      id: exercise1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 1: Transaction selection"
+        command: "python3 graders/grader_exercise01.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 40
+    
+    # Exercise 2
+    - name: "Exercise 2: Build Merkle Root"
+      id: exercise2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 2: Build Merkle Root"
+        command: "python3 graders/grader_exercise02.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 40
+    
+    # Exercise 3
+    - name: "Exercise 3: Mine a Block"
+      id: exercise3
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 3: Mine a block"
+        command: "python3 graders/grader_exercise03.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 20
+    
+    # Report results
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        EXERCISE1_RESULTS: "${{ steps.exercise1.outputs.result }}"
+        EXERCISE2_RESULTS: "${{ steps.exercise2.outputs.result }}"
+        EXERCISE3_RESULTS: "${{ steps.exercise3.outputs.result }}"
+      with:
+        runners: exercise1,exercise2,exercise3
