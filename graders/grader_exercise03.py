@@ -42,9 +42,10 @@ def fail(msg: str) -> None:
 
 
 def ok(block_hash_be: str, target_be: str) -> None:
-    print("OK")
-    print(f"Block hash : {block_hash_be}")
-    print(f"Target     : {target_be}")
+    # print("OK")
+    # print(f"Block hash : {block_hash_be}")
+    # print(f"Target     : {target_be}")
+    print("PASS")
     sys.exit(0)
 
 
@@ -156,20 +157,41 @@ def main():
     time_le = hdr[68:72]
     nonce_le = hdr[72:80]
 
-    # 3) Recompute merkle root from Exercise 1 (+ optional coinbase)
-    txs_be = maybe_prepend_coinbase(read_tx_list())
-    mrkl_be_expected = merkle_root_be_hex(txs_be)
-    mrkl_be_in_header = mrkl_le.hex()  # LE -> BE for comparison
+    # 3) Check version field
+    version = int.from_bytes(ver_le, "big")
+    if version < 1:
+        fail(f"Version should be greater than one, got {version}")
 
+    # 4) Check previous block hash
+    prev_block = prev_le.hex()
+    if prev_block != "00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee":
+        fail(
+            f"Wrong previous block. Expected 00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee, got {prev_block}"
+        )
+
+    # 5) Check merkle root
+    mrkl_be_expected = (
+        "c0a692de10b69e2381a2856dcb0d0736dcd307bf25af7ce74831bf25793de626"
+    )
+    mrkl_be_in_header = mrkl_le.hex()  # LE -> BE for comparison
     if mrkl_be_in_header != mrkl_be_expected:
         fail(
-            "Merkle root does not match transactions from exercise 1.\n"
+            "Merkle root does not match transactions from exercise 2.\n"
             f"Expected: {mrkl_be_expected}\n"
             f"Got     : {mrkl_be_in_header}"
         )
 
-    # 4) Decode compact target and compute PoW
-    nbits = "207fffff"
+    # 6) Check timestamp
+    timestamp = int.from_bytes(time_le, "big")
+    min_timestamp = 1230999305
+    max_timestamp = 1231723825
+    if timestamp < min_timestamp or timestamp > max_timestamp:
+        fail(
+            f"Invalid timestamp. Should be more than {min_timestamp} and less than {max_timestamp}, got {timestamp}."
+        )
+
+    # 7) Decode compact target and compute PoW
+    nbits = "1d00ffff"
     target_int = decode_compact_target_from_le(nbits)
     block_hash_le = sha256(hdr)
     block_hash_be = block_hash_le.hex()

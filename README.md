@@ -129,12 +129,18 @@ For this exercise, the block header will be composed by the following fields:
 1. The timestamp should be greater than `Jan 03 2009 16:15:05 UTC` and less than `Jan 12 2009 01:30:25 UTC`.
 2. The header must be serialized by concatenating the fields in order, in hex.
 
-The proof of work target is `00000000ffff0000000000000000000000000000000000000000000000000000`, i.e. the hash of your block header should be less than or equal to the target value.
+The proof of work target is `0x1d00ffff`.
+That means your block hash shoudlbe less than or equal to `00000000ffff0000000000000000000000000000000000000000000000000000`.
 
-TODO: Adjust this target so it's feasible. Currently is the initial target of the Bitcoin network.
+*NOTE*: That's the initial Bitcoin mainnet difficulty.
+On a modern computer, you can mine this in a few minutes with a parallel implementation.
+Imagine how much hardware Satoshi needed to mine this target in 2009.
 
 *Expected output*: a text file `solutions/exercise03.txt` with a valid block header, in hex format.
 
-TODO: Add example of output.
+Example output (with insufficient proof of work):
+```
+0000000200000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2eec0a692de10b69e2381a2856dcb0d0736dcd307bf25af7ce74831bf25793de626495f8f090000000000000000
+```
 
 *Bonus for fun*: Please report in the Discord server the time it took for your implementation to mine your block.
