@@ -51,6 +51,7 @@ Your program should select transactions in this list to compose a block accordin
 - For this exercise, assume that there is no coinbase transaction.
 - For this exercise, a block can't be empty.
 - For this exercise, your block MUST include the transaction `4c50e3dad7f98bceb6441f96b23748dea84fbdb7cedd603441e6ea4a574d04a6`. 
+- Your block should collect at least 50,000 sats in fees.
 
 *Expected output*: a text file `solutions/exercise01.txt` with the list of selected txids, separated by newlines, which make a valid block, maximizing the fee to the miner.
 Transactions must appear in order.
@@ -61,9 +62,15 @@ Of course, you want to maximize the total amount of fees paid by the transaction
 You are welcome to bribe yourself in the Discord server.
 Let's see who can take the most out of this mempool!
 
-TODO Example output:
+Example output (not an actual solution):
+```
+9919d4db3c0c32cfc19c6ffa32496f18bf28607d941fd7b89a5710031c43f599
+c63f430c09237dd7e43c31cb88512059416ef4c8fcd9134296ca6a919d185982
+7270b580dec8b8ae6fdb28d8260de1932f8355823b5758b0e95d5ed8cf7d041c
+03cd616cbb55a17f78bbe0c263f76c1007f9cd848f5c32a699b8805b9e436119
+4c50e3dad7f98bceb6441f96b23748dea84fbdb7cedd603441e6ea4a574d04a6
+```
 
-MAYBE: Ask for a minimum fee collected in the block to make it impossible to handcraft a solution like I did.
 
 ---
 

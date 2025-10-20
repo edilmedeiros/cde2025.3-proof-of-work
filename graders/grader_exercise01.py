@@ -5,27 +5,9 @@ Grader for Assignment 3 - Exercise 1 (Transaction selection)
 Validates a student's block candidate against:
 - Data source: data/mempool.csv
 
-Rules enforced (from README):
-- Total weight <= 4,000,000 (4MvB)
-- No duplicate transactions
-- Every listed txid must exist in the mempool
-- Parent/ancestor constraint: all listed parents must appear earlier in the block
-- Block cannot be empty
-- Optional: block MUST include a specific txid (if configured)
-
-Configuration for the required txid (choose ONE of the following):
-1) Env var REQUIRED_TXID
-2) File data/required_txid.txt (first non-empty line)
-If neither exists, the check is skipped (useful while your README is a draft).
-
-Exit codes:
-- 0 on success
-- 1 on failure
-
 Printed output is concise but actionable for students & CI logs.
 """
 
-import os
 import sys
 import csv
 from pathlib import Path
@@ -34,6 +16,7 @@ MEMPOOL_PATH = Path("data/mempool.csv")
 SUBMISSION_PATH = Path("solutions/exercise01.txt")
 REQUIRED_TXID = "4c50e3dad7f98bceb6441f96b23748dea84fbdb7cedd603441e6ea4a574d04a6"
 WEIGHT_LIMIT = 4_000_000
+REQUIRED_FEE = 50_000
 
 
 def load_mempool():
@@ -124,6 +107,13 @@ def check_all(mempool, submission, required_txid):
     if required_txid:
         if required_txid not in index:
             fail(f"Required txid not found in block: {required_txid}")
+
+    # 7) Required minimum 50000 in fees
+    fee = 0
+    for tx in submission:
+        fee = fee + mempool[tx]["fee"]
+    if fee < REQUIRED_FEE:
+        fail(f"Minimum fee of {REQUIRED_FEE} not reached. Collected {fee} sats.")
 
     # If all checks passed:
     ok(total_weight, len(submission))
