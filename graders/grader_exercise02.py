@@ -26,18 +26,18 @@ Exit codes:
 - 0 on success
 - 1 on failure
 """
+
 import hashlib
 import sys
 
+
 def main():
-
-
     solution_list = []
-    for line in open("ex2_solution.txt"):
+    for line in open("graders/ex2_solution.txt"):
         solution_list.append(line.strip())
 
     student_solution = []
-    for line in open("../solutions/exercise02.txt"):
+    for line in open("solutions/exercise02.txt"):
         student_solution.append(line.strip())
 
     # check merkle root
@@ -45,7 +45,10 @@ def main():
 
     student_root = student_solution.pop(0)
     try:
-        assert solution_list.pop(0) == hashlib.sha256(bytes.fromhex(student_root)).digest().hex()
+        assert (
+            solution_list.pop(0)
+            == hashlib.sha256(bytes.fromhex(student_root)).digest().hex()
+        )
     except AssertionError:
         fail = True
         print("FAIL: {} is the incorrect Merkle Root".format(student_root))
@@ -54,19 +57,30 @@ def main():
         assert len(solution_list) == len(student_solution)
     except AssertionError:
         fail = True
-        print("FAIL: solution is incorrect length was {}, should be {}".format(len(student_solution) + 1,
-                                                                               len(solution_list) + 1))
+        print(
+            "FAIL: solution is incorrect length was {}, should be {}".format(
+                len(student_solution) + 1, len(solution_list) + 1
+            )
+        )
 
     for i in range(min(len(solution_list), len(student_solution))):
         try:
-            assert solution_list[i] == hashlib.sha256(bytes.fromhex(student_solution[i])).digest().hex()
+            assert (
+                solution_list[i]
+                == hashlib.sha256(bytes.fromhex(student_solution[i])).digest().hex()
+            )
         except AssertionError:
             fail = True
-            print("FAIL: {} is the incorrect proof at level {}".format(student_solution[i], i))
+            print(
+                "FAIL: {} is the incorrect proof at level {}".format(
+                    student_solution[i], i
+                )
+            )
 
     if fail:
         sys.exit(1)
     else:
+        print("PASS")
         sys.exit(0)
 
 

@@ -63,6 +63,7 @@ You are welcome to bribe yourself in the Discord server.
 Let's see who can take the most out of this mempool!
 
 Example output (not an actual solution):
+
 ```
 9919d4db3c0c32cfc19c6ffa32496f18bf28607d941fd7b89a5710031c43f599
 c63f430c09237dd7e43c31cb88512059416ef4c8fcd9134296ca6a919d185982
@@ -89,17 +90,25 @@ Your program should compute the merkle root for the transactions provided in `da
 
 *Expected output*: a text file `solutions/exercise02.txt` with the merkle root of your block in the first line and proofs that the transaction `49ff8cccf1ca12179e9ae7a4760f550b5a18401b27e1e057604e27c3e10c08fb` was included in the block in the subsequent lines.
 
-Example Output format, not actual solution:
+As an example, if your block was composed by the transactions on the example output of exercise 1 and you want to prove that transaction `4c50...` was included in the block, you would have the following output:
 
-`182adcf8a8ae04bfa4e413d057618417c11ee13cfb28b9ddd3951d87f27e96be` <- `Merle Root`
+```
+81dc159b17005ec03047b485a07901fe0762cbde9e8fdfd7fa0484d026394c20
+03cd616cbb55a17f78bbe0c263f76c1007f9cd848f5c32a699b8805b9e436119
+8cecc0d377b6f78e678c6cec8754577bd77567fadb6f5cd04e2a3058df6788d1
+1343410f9bb7ba2de1e524e982036d43bf79a85dec5afcec45d6e34651835b9d
+```
 
-`2ffe4b4ee2d44a7f7021694bfc008fb6a489b79f3edca9e6807ef51c5a0cebe7` <- `Lv0 Sibling` that gets hashed with required TXID `49ff8ccc...8fb`
+First line (`81dc...`) is the merkle root for those five transactions.
+Next (`03cd...`) is the id of the transaction to the right of our target tx.
+Next is the hash of `9919...` concatenated with `c63f...` that should be concatenated to the left to compose the next level of the tree.
+Finally, `1343` is the part of the tree that was concatenated with itself two times in this example and that should be concatenated to the right of the previous result to reach the merkle root.
 
-`ee4c500282979f30b6dba2928034409658a216f76d759368309912197b389334` <- `Lv1 Sibling` that gets hashed with above `2ffe4...0be7`
-
-...
-
-`ee4c500282979f30b6dba2928034409658a216f76d759368309912197b389334` <- `Lv12 Sibling` that gets hashed to create the Merkle root
+In other words:
+- `81dc...` is the merkle root;
+- `03cd...` is the level 0 sibling that gets hashed with the required txid `7270...`;
+- `8cec...` is the level 1 sibling that gets hashed with above result;
+- `1343...` is the level 2 sibling that gets hashed with the above result.
 
 
 ---
