@@ -1,0 +1,69 @@
+name: Autograding Tests
+on:
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    # Exercise 1
+    - name: "Exercise 1: Transaction selection"
+      id: exercise1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 1: Transaction selection"
+        command: "python3 graders/grader_exercise01.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 40
+    
+    # Exercise 2
+    - name: "Exercise 2: Build Merkle Root"
+      id: exercise2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 2: Build Merkle Root"
+        command: "python3 graders/grader_exercise02.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 40
+    
+    # Exercise 3
+    - name: "Exercise 3: Mine a Block"
+      id: exercise3
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: "Exercise 3: Mine a block"
+        command: "python3 graders/grader_exercise03.py"
+        expected-output: "PASS"
+        comparison-method: exact
+        timeout: 10
+        max-score: 20
+    
+    # Report results
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        EXERCISE1_RESULTS: "${{ steps.exercise1.outputs.result }}"
+        EXERCISE2_RESULTS: "${{ steps.exercise2.outputs.result }}"
+        EXERCISE3_RESULTS: "${{ steps.exercise3.outputs.result }}"
+      with:
+        runners: exercise1,exercise2,exercise3
